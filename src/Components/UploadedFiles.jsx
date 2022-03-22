@@ -51,7 +51,7 @@ const UploadedFiles = ({ prices }) => {
                     localStorage.getItem("accessToken")
                   );
                   const { data } = await axios.get(
-                    `/download_result/${price.id}`,
+                    `/api/download_result/${price.id}`,
                     {
                       headers: {
                         "Content-Type": "application/json",

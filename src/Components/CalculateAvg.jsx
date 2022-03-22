@@ -16,7 +16,7 @@ const CalculateAvg = () => {
   const fetchFiles = async () => {
     try {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-      const { data } = await axios.get("/uploaded_stocks", {
+      const { data } = await axios.get("/api/uploaded_stocks", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -50,7 +50,7 @@ const CalculateAvg = () => {
       let formData = new FormData();
       formData.append("file", file);
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-      const response = await axios.post("/calc", formData, {
+      const response = await axios.post("/api/calc", formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,

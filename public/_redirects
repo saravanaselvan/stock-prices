@@ -1,2 +1,2 @@
-/api/*        https://stocks-price-api.herokuapp.com/api/:splat
+/api/*        https://stocks-price-api.herokuapp.com/api/:splat   200
 /*    /index.html   200 

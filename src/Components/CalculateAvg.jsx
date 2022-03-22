@@ -24,8 +24,9 @@ const CalculateAvg = () => {
           },
         });
         setPrices(data.prices);
+      } else {
+        navigate("/login");
       }
-      navigate("/login");
     } catch (error) {
       if (error.response.status == 401) {
         navigate("/login");

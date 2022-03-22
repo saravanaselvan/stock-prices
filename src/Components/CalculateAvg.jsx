@@ -16,13 +16,16 @@ const CalculateAvg = () => {
   const fetchFiles = async () => {
     try {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-      const { data } = await axios.get("/api/uploaded_stocks", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setPrices(data.prices);
+      if (accessToken) {
+        const { data } = await axios.get("/api/uploaded_stocks", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setPrices(data.prices);
+      }
+      navigate("/login");
     } catch (error) {
       if (error.response.status == 401) {
         navigate("/login");

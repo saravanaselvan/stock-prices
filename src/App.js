@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router";
 import "./App.css";
 import CalculateAvg from "./Components/CalculateAvg";
 import Login from "./Components/Login";
+import Register from "./Components/Register";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<CalculateAvg />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Box>
   );

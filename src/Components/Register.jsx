@@ -9,8 +9,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import stocksLogo from "../stocks.svg";
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [hidePassword, setHidePassword] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,11 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.post("/api/login", { email, password });
+      const { data } = await axios.post("/api/register", {
+        username,
+        email,
+        password,
+      });
       setLoading(false);
       setError(null);
       localStorage.setItem("userInfo", JSON.stringify(data.user_info));
@@ -35,7 +40,7 @@ const Login = () => {
       <Box
         bg="#fff"
         w="100%"
-        p={{ base: 8, md: 16 }}
+        p={{ base: 8, md: 8 }}
         borderRadius="lg"
         color="#000"
         borderWidth="1px"
@@ -46,10 +51,22 @@ const Login = () => {
           <Image src={stocksLogo} w="55px" mb={6} />
           <HStack alignSelf="flex-start">
             <Text fontSize="2xl" color="#000" mb={6} fontWeight="semibold">
-              Login to your account
+              Create an account
             </Text>
           </HStack>
           <form onSubmit={submitHandler} style={{ width: "100%" }}>
+            <FormControl id="username" isRequired mb={6}>
+              <FormLabel mb={4} color="gray.600">
+                Username
+              </FormLabel>
+              <Input
+                placeholder="Enter Your Username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                isRequired={true}
+              />
+            </FormControl>
             <FormControl id="email" isRequired mb={6}>
               <FormLabel mb={4} color="gray.600">
                 Email
@@ -94,7 +111,7 @@ const Login = () => {
               isLoading={loading}
               type="submit"
             >
-              Login
+              Register
             </Button>
           </form>
           <Text
@@ -104,13 +121,13 @@ const Login = () => {
             color="gray.600"
             fontWeight="500"
           >
-            Don't have an account?{" "}
+            Have an account?{" "}
             <Link
-              to="/register"
+              to="/login"
               style={{ color: "#3182ce" }}
               className="register-link"
             >
-              Register
+              Log In
             </Link>
           </Text>
         </VStack>
@@ -119,4 +136,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -16,7 +16,7 @@ const UploadedFiles = ({ prices }) => {
     a.remove();
   };
   return (
-    <Box overflowX="auto" maxWidth={{ sm: "300px", md: "600px", lg: "900px" }}>
+    <Box overflowX="auto" maxWidth={{ sm: "375px", md: "630px", lg: "900px" }}>
       <Table
         size="sm"
         variant="striped"

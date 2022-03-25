@@ -1,7 +1,8 @@
 import { Button } from "@chakra-ui/button";
 import { Box, Flex, Link, Text, VStack } from "@chakra-ui/layout";
+import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "./Navbar";
 import UploadedFiles from "./UploadedFiles";
@@ -13,6 +14,20 @@ const CalculateAvg = () => {
   const [isUploading, setIsUploading] = useState(false);
   const fileUploadRef = useRef();
   const navigate = useNavigate();
+  const toast = useToast();
+
+  const showServerError = useCallback(
+    (message = "Something went wrong") => {
+      toast({
+        description: message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    },
+    [toast]
+  );
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -32,14 +47,15 @@ const CalculateAvg = () => {
           navigate("/login");
         }
       } catch (error) {
-        setIsUploading(false);
         if (error.response.status === 401 || error.response.status === 422) {
           navigate("/login");
+        } else {
+          showServerError();
         }
       }
     };
     fetchFiles();
-  }, [navigate]);
+  }, [navigate, showServerError]);
 
   const jsonUploadHandler = (event) => {
     let pickedFile;
@@ -70,8 +86,13 @@ const CalculateAvg = () => {
       setFile("");
       fileUploadRef.current.value = "";
     } catch (error) {
+      setIsUploading(false);
       if (error.response.status === 401 || error.response.status === 422) {
         navigate("/login");
+      } else if (error.response.status === 400) {
+        showServerError(error.response.data.message);
+      } else {
+        showServerError();
       }
     }
   };
@@ -83,9 +104,21 @@ const CalculateAvg = () => {
         justifyContent="center"
         h="100vh"
       >
-        <VStack bgColor="white" height="100%" w="80%" p={10} pt={5}>
+        <VStack
+          bgColor="white"
+          height="100%"
+          w={{ base: "95%", md: "80%" }}
+          p={{ base: 5, md: 10 }}
+          pt={5}
+        >
           <Navbar />
-          <VStack w="100%" boxShadow="xs" p={8} spacing={8} rounded="md">
+          <VStack
+            w="100%"
+            boxShadow="0px 0px 5px 1px rgb(0 0 0 / 20%)"
+            p={{ base: "4", md: "8" }}
+            spacing={8}
+            rounded="md"
+          >
             <Text textAlign="left" size="xl">
               Please upload the stock prices as a json file to calculate Sum &
               Average. &nbsp;
@@ -98,16 +131,15 @@ const CalculateAvg = () => {
                 Download Sample Format
               </Link>
             </Text>
-            <Flex width="100%" justifyContent="center">
-              <form
-                onSubmit={handleSubmit}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+            {/* <Flex width="100%" justifyContent="center"> */}
+            <form onSubmit={handleSubmit}>
+              <Box
+                d="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                flexDirection={{ base: "column", md: "row" }}
               >
-                <Flex alignItems="center" mr="50px">
+                <Flex alignItems="center" mr={{ base: "0px", md: "50px" }}>
                   <input
                     type="file"
                     accept="application/json"
@@ -122,20 +154,30 @@ const CalculateAvg = () => {
                   >
                     Browse
                   </Button>
-                  <Text ml={4}>{fileName || "No file chosen"}</Text>
+                  <Text ml={4} minW="150px">
+                    {fileName || "No file chosen"}
+                  </Text>
                 </Flex>
                 <Button
                   type="submit"
                   colorScheme="blue"
                   isLoading={isUploading}
                   isDisabled={!file ? true : false}
+                  w="100%"
+                  mt={{ base: "20px", md: "0px" }}
                 >
                   Upload
                 </Button>
-              </form>
-            </Flex>
+              </Box>
+            </form>
+            {/* </Flex> */}
           </VStack>
-          <Box boxShadow="xs" rounded="md" p={8} minW="100%">
+          <Box
+            boxShadow="0px 0px 5px 1px rgb(0 0 0 / 20%)"
+            rounded="md"
+            p={8}
+            minW="100%"
+          >
             <Text textAlign="left" fontSize="xl" fontWeight="500" mb={4}>
               Previously uploaded files:
             </Text>

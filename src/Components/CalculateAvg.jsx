@@ -87,6 +87,9 @@ const CalculateAvg = () => {
       fileUploadRef.current.value = "";
     } catch (error) {
       setIsUploading(false);
+      setFileName("");
+      setFile("");
+      fileUploadRef.current.value = "";
       if (error.response.status === 401 || error.response.status === 422) {
         navigate("/login");
       } else if (error.response.status === 400) {
